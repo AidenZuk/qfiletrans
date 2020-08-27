@@ -1,0 +1,12 @@
+/home/zhu/projects/minihttp/target/debug/deps/httparse-c36015986759fb44.rmeta: /home/zhu/.cargo/registry/src/mirrors.ustc.edu.cn-61ef6e0cd06fb9b8/httparse-1.3.4/src/lib.rs /home/zhu/.cargo/registry/src/mirrors.ustc.edu.cn-61ef6e0cd06fb9b8/httparse-1.3.4/src/iter.rs /home/zhu/.cargo/registry/src/mirrors.ustc.edu.cn-61ef6e0cd06fb9b8/httparse-1.3.4/src/macros.rs /home/zhu/.cargo/registry/src/mirrors.ustc.edu.cn-61ef6e0cd06fb9b8/httparse-1.3.4/src/simd/mod.rs /home/zhu/.cargo/registry/src/mirrors.ustc.edu.cn-61ef6e0cd06fb9b8/httparse-1.3.4/src/simd/sse42.rs /home/zhu/.cargo/registry/src/mirrors.ustc.edu.cn-61ef6e0cd06fb9b8/httparse-1.3.4/src/simd/avx2.rs
+
+/home/zhu/projects/minihttp/target/debug/deps/libhttparse-c36015986759fb44.rlib: /home/zhu/.cargo/registry/src/mirrors.ustc.edu.cn-61ef6e0cd06fb9b8/httparse-1.3.4/src/lib.rs /home/zhu/.cargo/registry/src/mirrors.ustc.edu.cn-61ef6e0cd06fb9b8/httparse-1.3.4/src/iter.rs /home/zhu/.cargo/registry/src/mirrors.ustc.edu.cn-61ef6e0cd06fb9b8/httparse-1.3.4/src/macros.rs /home/zhu/.cargo/registry/src/mirrors.ustc.edu.cn-61ef6e0cd06fb9b8/httparse-1.3.4/src/simd/mod.rs /home/zhu/.cargo/registry/src/mirrors.ustc.edu.cn-61ef6e0cd06fb9b8/httparse-1.3.4/src/simd/sse42.rs /home/zhu/.cargo/registry/src/mirrors.ustc.edu.cn-61ef6e0cd06fb9b8/httparse-1.3.4/src/simd/avx2.rs
+
+/home/zhu/projects/minihttp/target/debug/deps/httparse-c36015986759fb44.d: /home/zhu/.cargo/registry/src/mirrors.ustc.edu.cn-61ef6e0cd06fb9b8/httparse-1.3.4/src/lib.rs /home/zhu/.cargo/registry/src/mirrors.ustc.edu.cn-61ef6e0cd06fb9b8/httparse-1.3.4/src/iter.rs /home/zhu/.cargo/registry/src/mirrors.ustc.edu.cn-61ef6e0cd06fb9b8/httparse-1.3.4/src/macros.rs /home/zhu/.cargo/registry/src/mirrors.ustc.edu.cn-61ef6e0cd06fb9b8/httparse-1.3.4/src/simd/mod.rs /home/zhu/.cargo/registry/src/mirrors.ustc.edu.cn-61ef6e0cd06fb9b8/httparse-1.3.4/src/simd/sse42.rs /home/zhu/.cargo/registry/src/mirrors.ustc.edu.cn-61ef6e0cd06fb9b8/httparse-1.3.4/src/simd/avx2.rs
+
+/home/zhu/.cargo/registry/src/mirrors.ustc.edu.cn-61ef6e0cd06fb9b8/httparse-1.3.4/src/lib.rs:
+/home/zhu/.cargo/registry/src/mirrors.ustc.edu.cn-61ef6e0cd06fb9b8/httparse-1.3.4/src/iter.rs:
+/home/zhu/.cargo/registry/src/mirrors.ustc.edu.cn-61ef6e0cd06fb9b8/httparse-1.3.4/src/macros.rs:
+/home/zhu/.cargo/registry/src/mirrors.ustc.edu.cn-61ef6e0cd06fb9b8/httparse-1.3.4/src/simd/mod.rs:
+/home/zhu/.cargo/registry/src/mirrors.ustc.edu.cn-61ef6e0cd06fb9b8/httparse-1.3.4/src/simd/sse42.rs:
+/home/zhu/.cargo/registry/src/mirrors.ustc.edu.cn-61ef6e0cd06fb9b8/httparse-1.3.4/src/simd/avx2.rs:
