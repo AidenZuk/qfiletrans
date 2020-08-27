@@ -1,1 +1,0 @@
-{"rustc":15479600521011547909,"features":"[\"kv_unstable\"]","target":10088282520713642473,"profile":11677938664258541388,"path":7325294504445009755,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/log-b20a8760c2371d87/dep-build-script-build-script-build"}}],"rustflags":["-C","target-cpu=native","-g"],"metadata":179143468214550567}

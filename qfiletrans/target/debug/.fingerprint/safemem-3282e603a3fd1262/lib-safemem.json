@@ -1,1 +1,0 @@
-{"rustc":15479600521011547909,"features":"[\"default\", \"std\"]","target":7532111961563040860,"profile":11677938664258541388,"path":10164869306551389149,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/safemem-3282e603a3fd1262/dep-lib-safemem"}}],"rustflags":["-C","target-cpu=native","-g"],"metadata":5961032267634545031}

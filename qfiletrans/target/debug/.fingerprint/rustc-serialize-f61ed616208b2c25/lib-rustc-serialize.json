@@ -1,1 +1,0 @@
-{"rustc":15479600521011547909,"features":"[]","target":10268332431035512559,"profile":11677938664258541388,"path":14743272169291679705,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/rustc-serialize-f61ed616208b2c25/dep-lib-rustc-serialize"}}],"rustflags":["-C","target-cpu=native","-g"],"metadata":9529955203431164134}
