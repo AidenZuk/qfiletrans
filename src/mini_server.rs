@@ -14,7 +14,8 @@ pub fn start_server(addr:&str,port:u16)->std::io::Result<()> {
         while let Some(stream) = incoming.next() {
             let stream = stream?;
             let (reader, writer) = &mut (&stream, &stream);
-            //
+            let header_buf = vec![0u8;1024];
+
         }
         Ok(())
     }else{

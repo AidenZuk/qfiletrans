@@ -16,3 +16,5 @@ num-derive = "0.3"
 num-traits = "0.2"
 rayon = "1.4.0"
 log = "0.4.11"
+structopt = "0.2.10"
+tokio = { version = "0.2", features = ["macros", "tcp", "dns", "io-util","sync"] }

@@ -1,4 +1,4 @@
-use std::io::{ Write,Read};
+use async_std::io::{ Write,Read};
 use crate::protocol::GL_CHUNK_STATE::{WAIT_CMD, WAIT_STATUS_CODE, IN_CHUNK_LEN, WAIT_END};
 use std::io::Cursor;
 use byteorder::{BigEndian,ReadBytesExt,WriteBytesExt};
@@ -10,13 +10,13 @@ use std::alloc::handle_alloc_error;
 use num;
 use num_derive::FromPrimitive;
 use num_traits::FromPrimitive;
-
+use log::*;
 use std::fs::{File,OpenOptions};
 use std::path::{PathBuf, Path};
 use std::collections::HashMap;
 use std::sync::{Arc,Mutex};
 use std::ops::DerefMut;
-use std::sync::mpsc::{SyncSender,Receiver,sync_channel};
+use std::sync::mpsc::{SyncSender,Receiver,sync_channel,RecvError};
 pub struct WriteFileReq{
     pub handle:u32,
     pub file_name:String,
@@ -102,12 +102,6 @@ pub enum GL_CHUNK_STATE {
 
 
 }
-
-
-type FWReq = fn(Arc<Mutex<ProtocolParser>>,u32, String,u64)->Result<u8>;
-type FWResp = fn(Arc<Mutex<ProtocolParser>>,u32,Option<u8>);
-type CWReq = fn(Arc<Mutex<ProtocolParser>>,u32,u32,usize,usize,&[u8])->Result<u8>;
-type CWResp = fn(Arc<Mutex<ProtocolParser>>,u32,Option<u8>);
 pub struct ChunkParser<'a>
 {
     state:GL_CHUNK_STATE,
@@ -394,9 +388,6 @@ pub struct ProtocolParser<'a> {
     state: GL_STATE,
     buff_mode_left:u64,
     cmd_parser:Option<ChunkParser<'a>>,
-    reader:Arc<Mutex<Option<Box<dyn Read + 'static + Send>>>>,
-    writer:Arc<Mutex<Option<Box<Write + 'static + Send>>>>,
-
 
 }
 
@@ -428,9 +419,6 @@ impl<'a> ProtocolParser<'a>
             state:GL_STATE::IN_BYTE_MODE,
             buff_mode_left:0,
             cmd_parser:None,
-            reader:Arc::new(Mutex::new(None)),
-            writer:Arc::new(Mutex::new(None)),
-
         }
     }
 
@@ -468,13 +456,11 @@ impl<'a> ProtocolParser<'a>
             panic!("no command parser!");
         }
     }
-    pub fn run(&mut self, reader:Arc<Mutex<impl Read + 'static + Send>>, writer:Arc<Mutex<Option<Box<Write + 'static + Send>>>>){
+    pub async fn run(&mut self, mut reader:Read){
         let mut read_buffer = vec![0u8;self.buf_size];
-        self.writer = writer.clone();
-
-        loop {
+                loop {
             let size_value= {
-                reader.lock().unwrap().deref_mut().read(&mut read_buffer[..])
+                reader.read(&mut read_buffer[..]).await;
             };
             if let Ok(size_value) = size_value {
                 let mut processed = 0usize;
@@ -498,11 +484,56 @@ impl<'a> ProtocolParser<'a>
 
         }
     }
-
-
 }
 
-pub fn create_write_req(file_name:String,data_len:u64)->Result<(u32,Vec<u8>)>{
+pub trait ProtoProcIntf<'a> {
+    fn recv(&self) -> Result<ProtocolMsgs<'a>, RecvError>;
+    fn run(&mut self){
+        loop {
+            match self.recv() {
+                Ok(msg) =>{
+                    let mut should_exit = false;
+                    match(msg) {
+                        ProtocolMsgs::FileReq(file_req) =>{
+                            should_exit = self.on_write_file_req(file_req.handle,file_req.file_name,file_req.total_len)
+                        },
+                        ProtocolMsgs::FileResp(file_resp) =>{
+                            should_exit = self.on_write_file_resp(file_resp.handle,file_resp.status)
+                        },
+                        ProtocolMsgs::ChunkReq(chunk_req) =>{
+                            should_exit = self.on_write_chunk_req(chunk_req.handle,chunk_req.chunkid,chunk_req.start,chunk_req.len,chunk_req.chunk)
+                        },
+                        ProtocolMsgs::ChunkResp(chunk_resp) =>{
+                            should_exit = self.on_write_chunk_resp(chunk_resp.handle,chunk_resp.chunkid,chunk_resp.status)
+                        },
+                    }
+                    if should_exit {
+                        error!("exit by request")
+                    }
+                },
+                Err(e) => {
+                    error!("error in recv:{}",e.to_string())
+                }
+            }
+        }
+    }
+
+    fn  on_write_file_req (&mut self, handle_id:u32, file_name:String,file_len:u64)->bool{
+        false
+    }
+
+    fn on_write_file_resp  (&mut self, handle_id:u32, status :u8)->bool {
+        false
+    }
+    fn on_write_chunk_req(&mut self, handle_id:u32, chunk_id:u32, chunk_start:u64, chunk_len:u64, chunk_data:Arc<Mutex<&[u8]>>) ->bool {
+        false
+    }
+    fn on_write_chunk_resp(&mut self, handle_id:u32,chunk_id:u32, status:u8) ->bool{
+        false
+    }
+}
+/// create write a file request
+pub fn create_file_req(file_name:String,data_len:u64)->Result<(u32,Vec<u8>)>{
     let buffer_len = WriteFileReqPrefix + file_name.len() as u32;
     let mut buffer = Vec::with_capacity(buffer_len as usize);
     //create handle_id
@@ -516,11 +547,9 @@ pub fn create_write_req(file_name:String,data_len:u64)->Result<(u32,Vec<u8>)>{
     buffer[18+buffer_len as usize] = TAG_END as u8;
 
     Ok((handle_id,buffer))
-
-
 }
 
-pub fn create_write_resp(handle_id:u32,status:u8)->Result<Vec<u8>>{
+pub fn create_file_resp(handle_id:u32,status:u8)->Result<Vec<u8>>{
     let buffer_len = WriteFileRespPrefix as usize;
     let mut buffer = Vec::with_capacity(buffer_len);
     //create handle_id

@@ -1,12 +1,12 @@
 use std::collections::HashMap;
-use crate::protocol::{ ProtocolParser,ProtocolMsgs,create_write_req,create_write_resp,create_chunk_req,create_chunk_resp};
+use crate::protocol::{ ProtocolParser,ProtocolMsgs,ProtoProcIntf,create_file_req,create_file_resp,create_chunk_req,create_chunk_resp};
 use std::fs::{OpenOptions,File};
 use anyhow::{*,Result};
 use std::path::Path;
 use rayon::Scope;
 use log::*;
 use std::net::TcpStream;
-use std::{
+use async_std::{
     prelude::*, // 1
     task, // 2
     net::{TcpListener, ToSocketAddrs}, // 3
@@ -17,71 +17,23 @@ use std::sync::mpsc::{Receiver,SyncSender,sync_channel,RecvError};
 use std::ops::{Deref, DerefMut};
 use std::time::Duration;
 
-
-pub trait FileManagerIntf<'a> {
-    fn recv(&self) -> Result<ProtocolMsgs<'a>, RecvError>;
-    fn run(&mut self){
-        loop {
-            match self.recv() {
-                Ok(msg) =>{
-                    let mut should_exit = false;
-                    match(msg) {
-                        ProtocolMsgs::FileReq(file_req) =>{
-                            should_exit = self.on_write_file_req(file_req.handle,file_req.file_name,file_req.total_len)
-                        },
-                        ProtocolMsgs::FileResp(file_resp) =>{
-                            should_exit = self.on_write_file_resp(file_resp.handle,file_resp.status)
-                        },
-                        ProtocolMsgs::ChunkReq(chunk_req) =>{
-                            should_exit = self.on_write_chunk_req(chunk_req.handle,chunk_req.chunkid,chunk_req.start,chunk_req.len,chunk_req.chunk)
-                        },
-                        ProtocolMsgs::ChunkResp(chunk_resp) =>{
-                            should_exit = self.on_write_chunk_resp(chunk_resp.handle,chunk_resp.chunkid,chunk_resp.status)
-                        },
-                    }
-                    if should_exit {
-                        error!("exit by request")
-                    }
-                },
-                Err(e) => {
-                    error!("error in recv:{}",e.to_string())
-                }
-
-            }
-        }
-    }
-
-    fn  on_write_file_req (&mut self, handle_id:u32, file_name:String,file_len:u64)->bool{
-        false
-    }
-
-    fn on_write_file_resp  (&mut self, handle_id:u32, status :u8)->bool {
-        false
-    }
-    fn on_write_chunk_req(&mut self, handle_id:u32, chunk_id:u32, chunk_start:u64, chunk_len:u64, chunk_data:Arc<Mutex<&[u8]>>) ->bool {
-        false
-    }
-    fn on_write_chunk_resp(&mut self, handle_id:u32,chunk_id:u32, status:u8) ->bool{
-        false
-    }
-}
 pub struct FileServer<'a>{
     file_handle:HashMap<u32,File>,
     config_path:String,
     receiver:Receiver<ProtocolMsgs<'a>>,
-    write:Arc<Mutex<Option<Box<Write>>>>
+    write:Box<dyn Write>,
 }
 impl <'a>  FileServer<'a>{
-    fn new(config_path:String,receiver:Receiver<ProtocolMsgs<'a>>,writer:Arc<Mutex<Option<Box<Write>>>>)->Self{
+    fn new(config_path:String,receiver:Receiver<ProtocolMsgs<'a>>,writer:Box<dyn Write >)->Self{
         FileServer {
             file_handle:HashMap::new(),
             config_path:config_path.clone(),
             receiver,
-            write:writer.clone()
+            write:writer
         }
     }
 }
-impl<'a> FileManagerIntf<'a> for FileServer<'a> {
+impl<'a> ProtoProcIntf<'a> for FileServer<'a> {
     fn recv(&self) -> Result<ProtocolMsgs<'a>, RecvError>{
         self.receiver.recv()
     }
@@ -110,11 +62,11 @@ impl<'a> FileManagerIntf<'a> for FileServer<'a> {
             }
         };
         let resp_vec = if result == false{
-            create_write_resp(handle_id,0)
+            create_file_resp(handle_id,0)
         }else{
-            create_write_resp(handle_id,1)
+            create_file_resp(handle_id,1)
         };
-        self.write.lock().unwrap().deref_mut().unwrap().as_mut().write(&resp_vec.unwrap()[..]);
+        self.write.as_mut().write(&resp_vec.unwrap()[..]);
         result
     }
 
@@ -140,12 +92,12 @@ impl<'a> FileManagerIntf<'a> for FileServer<'a> {
         if result == 0 {
             if chunk_start + chunk_data.lock().unwrap().deref().len() as u64 >= chunk_len{
                 let resp_vec = create_chunk_resp(handle_id,chunk_id,result);
-                self.write.lock().unwrap().deref_mut().unwrap().as_mut().write(&resp_vec.unwrap()[..]);
+                self.write.as_mut().write(&resp_vec.unwrap()[..]);
             };
             false
         }else{
             let resp_vec = create_chunk_resp(handle_id,chunk_id,result);
-            self.write.lock().unwrap().deref_mut().unwrap().as_mut().write(&resp_vec.unwrap()[..]);
+            self.write.as_mut().write(&resp_vec.unwrap()[..]);
             true
         }
     }
@@ -154,17 +106,49 @@ impl<'a> FileManagerIntf<'a> for FileServer<'a> {
     }
 }
 
+pub enum UploadState{
+    US_IDLE,
+    US_WRITING_H,
+    US_WRITING_CHUNK,
+    US_WRITING_END,
+}
 pub struct FileClient<'a>{
     file_handle:Option<File>,
-    receiver:Receiver<ProtocolMsgs<'a>>,
-    writer:Arc<Mutex<Option<Box<dyn Write  + 'static + Send>>>>,
     buf_size:u64,
+    handle_id:u32,
     time_out:Duration,
     config_path:String,
     file_name:String,
+    cur_state:UPLOAD_STAT
+}
+pub struct UpEvtStart {
+    file_name:String,
+}
+pub struct UpEvtHeaderResp {
+    handle_id:u32,
+    status:u8
+}
+pub struct UpEvtChunkResp {
+    handle_id:u32,
+    chunk_id:u32,
+    start:u64,
+    len:u64,
+    status:u8
+}
+pub struct UpEvtTimeout ();
+pub struct UpEvtOtherError{
+    reason:u8
+}
+
+pub enum UpEvent{
+    EvtStart(UpEvtStart),
+    EvtHeadResp(UpEvtHeaderResp),
+    EvtChunkResp(UpEvtChunkResp),
+    EvtTimeOut,
+    EvtOther(UpEvtOtherError)
 }
 impl<'a> FileClient<'a> {
-    pub fn new(config_path:String,file_name:String,receiver:Receiver<ProtocolMsgs<'a>>,writer:Arc<Mutex<Option<Box<dyn Write + 'static + Send>>>>,buf_len:u64,time_out:Duration)->Self{
+    pub fn new(config_path:String,file_name:String,receiver:Receiver<ProtocolMsgs<'a>>,writer:Box<dyn Write>,buf_len:u64,time_out:Duration)->Self{
         let mut  options = OpenOptions::new();
 
         let file = match options.read(true).open(Path::new(&file_name)) {
@@ -178,31 +162,60 @@ impl<'a> FileClient<'a> {
         };
         FileClient{
             file_handle:file,
-            receiver,
-            writer:writer.clone(),
             buf_size:buf_len,
+            handle_id:0,
             time_out,
             config_path,
-            file_name
+            file_name,
+            cur_state:UploadState::US_IDLE,
         }
     }
 
-    pub fn do_upload(&mut self){
-        rayon::scope(|s|{
+    pub async fn process(&mut self, event: UpEvent, mut writer:impl Write) ->tokio::Result<bool>{
 
-            if let Some(file) = &self.file_handle {
-                s.spawn(|_s|{
-                    &self.run();
-                });
-                let len = file.metadata().unwrap().len();
-                let result=create_write_req(self.file_name.clone(),len).unwrap();
-                self.writer.lock().unwrap().deref_mut().unwrap().as_mut().write(&result.1[..]);
+        match event {
+            UpEvent::EvtStart(start_req) =>{
+                let mut  options = OpenOptions::new();
+
+                match options.read(true).open(Path::new(&(&self.config_path + &start_req.file_name))) {
+                    Ok(file) =>{
+                        self.file_handle = Some(file);
+                        let len = file.metadata().unwrap().len();
+                        if let Ok(req_vec) = create_file_req(start_req.file_name.clone(),len) {
+                            writer.write(&req_vec[..]).await;
+                            self.cur_state = UploadState::US_WRITING_H;
+                            Ok(false)
+                        }else{
+                            Err(anyhow!("open file {}"))
+                        }
+                    },
+                    Err(e) =>{
+                        error!("error in open file {}, reason: {}",&file_name,e.to_string());
+                        Err(e)
+                    }
+                }
+            },
+            UpEvent::EvtHeadResp(h_resp)=>{
+                if self.cur_state == UploadState::US_WRITING_H {
+                    if h_resp.status == 0 {
+                        self.handle_id = 0;
+                    }
+                }
+            },
+            UpEvent::EvtChunkResp(c_resp)=>{
+
+            },
+            UpEvent::EvtTimeOut =>{
+
+            },
+            UpEvent::EvtOther(other_err)=>{
+
             }
-        });
 
+        }
     }
 }
-impl<'a> FileManagerIntf<'a> for FileClient<'a> {
+impl<'a> ProtoProcIntf<'a> for FileClient<'a> {
     fn recv(&self) -> Result<ProtocolMsgs<'a>, RecvError>{
         self.receiver.recv_timeout(self.time_out).map_err(|e| { RecvError })
     }
