@@ -164,11 +164,11 @@ fn start_server(parent_path: std::path::PathBuf) {
                         .output()
                         .expect("failed to create cache path");
                     let mut open_option = OpenOptions::new();
-                    if let Ok(mut file) = open_option.append(true).create_new(true).open(parent_path.join(&file_name)) {
+                    if let Ok(mut file) = open_option.write(true).create(true).open(parent_path.join(&file_name)) {
                         let mut buffer = vec![0u8; buf_len];
                         let mut cur_read_offset = 0usize;
 
-
+                        file.set_len(file_info.file_len);
                         loop {
                             match reader.read(&mut buffer[cur_read_offset..buf_len]) {
                                 Ok(read_size) => {
