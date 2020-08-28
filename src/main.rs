@@ -284,14 +284,14 @@ fn start_client(dest: String, config_path: std::path::PathBuf, file_name: std::p
     }
 }
 
-fn main() {
-    let args = Cli::from_args();
-    if args.mode == String::from("server") {
-        start_server(args.path);
-    } else if args.mode == String::from("client") {
-        start_client(args.dest, args.path.parent().unwrap().to_path_buf(), PathBuf::from(args.path.file_name().unwrap()));
-    }
-}
+// fn main() {
+//     let args = Cli::from_args();
+//     if args.mode == String::from("server") {
+//         start_server(args.path);
+//     } else if args.mode == String::from("client") {
+//         start_client(args.dest, args.path.parent().unwrap().to_path_buf(), PathBuf::from(args.path.file_name().unwrap()));
+//     }
+// }
 
 #[cfg(test)]
 mod Test {
