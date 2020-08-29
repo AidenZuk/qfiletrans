@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated />
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="CargoProjects">
+    <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="9fc0e7f6-5b22-4148-be7f-0b78ae8ca4e0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Rust File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="mzpnue3s" />
+  </component>
+  <component name="ProjectId" id="1gcOT7p7sx7XgWMWGqFxJ84rO3e" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="cf.first.check.clang-format" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="org.rust.cargo.project.model.PROJECT_DISCOVERY" value="true" />
+    <property name="org.rust.disableDetachedFileInspection/home/zhu/projects/qfiletrans/src/mod.rs" value="true" />
+  </component>
+  <component name="RunManager" selected="Cargo Command.run">
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test Test::test_FileInfo" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="channel" value="DEFAULT" />
+      <option name="command" value="test --package qfiletrans --bin qfiletrans Test::test_FileInfo -- --exact" />
+      <option name="allFeatures" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="backtrace" value="SHORT" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="run client (1)" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+      <option name="channel" value="DEFAULT" />
+      <option name="command" value="run --package qfiletrans --bin qfiletrans -- client &quot;/mnt/data/bench/bench32G/bench778077162/unsealed/s-t01000-1&quot; -d  &quot;cd232:8081&quot; " />
+      <option name="allFeatures" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="backtrace" value="SHORT" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="run client" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="channel" value="DEFAULT" />
+      <option name="command" value="run --package qfiletrans --bin qfiletrans -- client &quot;/mnt/data/bench/bench32G/bench778077162/cache/s-t01000-1/sc-02-data-tree-d.dat&quot; -d  &quot;cd232:8081&quot; " />
+      <option name="allFeatures" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="backtrace" value="SHORT" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="run server" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+      <option name="channel" value="DEFAULT" />
+      <option name="command" value="run --package qfiletrans --bin qfiletrans --  server /mnt/data  -d &quot;&quot; " />
+      <option name="allFeatures" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="backtrace" value="SHORT" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="run" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="channel" value="DEFAULT" />
+      <option name="command" value="run --package qfiletrans --bin qfiletrans" />
+      <option name="allFeatures" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="backtrace" value="SHORT" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Cargo Command.run server" />
+      <item itemvalue="Cargo Command.run client (1)" />
+      <item itemvalue="Cargo Command.run client" />
+      <item itemvalue="Cargo Command.run" />
+      <item itemvalue="Cargo Command.Test Test::test_FileInfo" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Cargo Command.run" />
+        <item itemvalue="Cargo Command.run" />
+        <item itemvalue="Cargo Command.run" />
+        <item itemvalue="Cargo Command.run" />
+        <item itemvalue="Cargo Command.run" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="RustProjectSettings">
+    <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
+    <option name="version" value="2" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9fc0e7f6-5b22-4148-be7f-0b78ae8ca4e0" name="Default Changelist" comment="" />
+      <created>1598410418719</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1598410418719</updated>
+      <workItem from="1598410419775" duration="4843000" />
+      <workItem from="1598419576169" duration="41088000" />
+      <workItem from="1598499096192" duration="49187000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="875" y="376" width="800" height="712" key="#Plugins" timestamp="1598433511977">
+      <screen x="0" y="27" width="2560" height="1413" />
+    </state>
+    <state x="875" y="376" width="800" height="712" key="#Plugins/0.27.2560.1413/2560.0.1920.1080@0.27.2560.1413" timestamp="1598433511977" />
+    <state x="531" y="370" width="1760" height="902" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1598609246961">
+      <screen x="0" y="27" width="2560" height="1413" />
+    </state>
+    <state x="531" y="370" width="1760" height="902" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.27.2560.1413/2560.0.1920.1080@0.27.2560.1413" timestamp="1598609246961" />
+    <state width="475" height="608" key="DebuggerActiveHint" timestamp="1598608250240">
+      <screen x="0" y="27" width="2560" height="1413" />
+    </state>
+    <state width="475" height="608" key="DebuggerActiveHint/0.27.2560.1413/2560.0.1920.1080@0.27.2560.1413" timestamp="1598608250240" />
+    <state width="2506" height="674" key="GridCell.Tab.0.bottom" timestamp="1598712552544">
+      <screen x="0" y="27" width="2560" height="1413" />
+    </state>
+    <state width="2506" height="674" key="GridCell.Tab.0.bottom/0.27.2560.1413/2560.0.1920.1080@0.27.2560.1413" timestamp="1598712552544" />
+    <state width="2506" height="674" key="GridCell.Tab.0.center" timestamp="1598712552544">
+      <screen x="0" y="27" width="2560" height="1413" />
+    </state>
+    <state width="2506" height="674" key="GridCell.Tab.0.center/0.27.2560.1413/2560.0.1920.1080@0.27.2560.1413" timestamp="1598712552544" />
+    <state width="2506" height="674" key="GridCell.Tab.0.left" timestamp="1598712552544">
+      <screen x="0" y="27" width="2560" height="1413" />
+    </state>
+    <state width="2506" height="674" key="GridCell.Tab.0.left/0.27.2560.1413/2560.0.1920.1080@0.27.2560.1413" timestamp="1598712552544" />
+    <state width="2506" height="674" key="GridCell.Tab.0.right" timestamp="1598712552544">
+      <screen x="0" y="27" width="2560" height="1413" />
+    </state>
+    <state width="2506" height="674" key="GridCell.Tab.0.right/0.27.2560.1413/2560.0.1920.1080@0.27.2560.1413" timestamp="1598712552544" />
+    <state width="2506" height="657" key="GridCell.Tab.1.bottom" timestamp="1598610417544">
+      <screen x="0" y="27" width="2560" height="1413" />
+    </state>
+    <state width="2506" height="657" key="GridCell.Tab.1.bottom/0.27.2560.1413/2560.0.1920.1080@0.27.2560.1413" timestamp="1598610417544" />
+    <state width="2506" height="657" key="GridCell.Tab.1.center" timestamp="1598610417544">
+      <screen x="0" y="27" width="2560" height="1413" />
+    </state>
+    <state width="2506" height="657" key="GridCell.Tab.1.center/0.27.2560.1413/2560.0.1920.1080@0.27.2560.1413" timestamp="1598610417544" />
+    <state width="2506" height="657" key="GridCell.Tab.1.left" timestamp="1598610417544">
+      <screen x="0" y="27" width="2560" height="1413" />
+    </state>
+    <state width="2506" height="657" key="GridCell.Tab.1.left/0.27.2560.1413/2560.0.1920.1080@0.27.2560.1413" timestamp="1598610417544" />
+    <state width="2506" height="657" key="GridCell.Tab.1.right" timestamp="1598610417544">
+      <screen x="0" y="27" width="2560" height="1413" />
+    </state>
+    <state width="2506" height="657" key="GridCell.Tab.1.right/0.27.2560.1413/2560.0.1920.1080@0.27.2560.1413" timestamp="1598610417544" />
+    <state x="100" y="125" width="2360" height="1215" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1598529513506">
+      <screen x="0" y="27" width="2560" height="1413" />
+    </state>
+    <state x="100" y="125" width="2360" height="1215" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.27.2560.1413/2560.0.1920.1080@0.27.2560.1413" timestamp="1598529513506" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/mod.rs</url>
+          <line>123</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/mod.rs</url>
+          <line>132</line>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/mod.rs</url>
+          <line>135</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
