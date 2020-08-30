@@ -117,7 +117,7 @@ impl From<&Vec<u8>> for FileInfo {
 
 
 pub fn start_server(parent_path: std::path::PathBuf) {
-    let listener = TcpListener::bind("0.0.0.0:38081").unwrap();
+    let listener = TcpListener::bind("0.0.0.0:8081").unwrap();
     //  let mut incoming = listener.incoming();
 
     let total_threads = Arc::new(Mutex::new(0));
