@@ -13,7 +13,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9fc0e7f6-5b22-4148-be7f-0b78ae8ca4e0" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,11 +58,6 @@
     <property name="org.rust.disableDetachedFileInspection/home/zhu/projects/qfiletrans/src/mod.rs" value="true" />
   </component>
   <component name="RunManager" selected="Cargo Command.run">
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Test Test::test_FileInfo" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
       <option name="channel" value="DEFAULT" />
       <option name="command" value="test --package qfiletrans --bin qfiletrans Test::test_FileInfo -- --exact" />
@@ -123,11 +119,11 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Cargo Command.run server" />
+      <item itemvalue="Cargo Command.Test Test::test_FileInfo" />
       <item itemvalue="Cargo Command.run client (1)" />
       <item itemvalue="Cargo Command.run client" />
+      <item itemvalue="Cargo Command.run server" />
       <item itemvalue="Cargo Command.run" />
-      <item itemvalue="Cargo Command.Test Test::test_FileInfo" />
     </list>
     <recent_temporary>
       <list>
@@ -154,6 +150,8 @@
       <workItem from="1598410419775" duration="4843000" />
       <workItem from="1598419576169" duration="41088000" />
       <workItem from="1598499096192" duration="49187000" />
+      <workItem from="1598935712643" duration="1652000" />
+      <workItem from="1599026763544" duration="662000" />
     </task>
     <servers />
   </component>
@@ -209,6 +207,10 @@
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state x="100" y="125" width="2360" height="1215" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.27.2560.1413/2560.0.1920.1080@0.27.2560.1413" timestamp="1598529513506" />
+    <state x="971" y="360" width="617" height="626" key="find.popup" timestamp="1598935942959">
+      <screen x="0" y="27" width="2560" height="1413" />
+    </state>
+    <state x="971" y="360" width="617" height="626" key="find.popup/0.27.2560.1413/2560.0.1920.1080@0.27.2560.1413" timestamp="1598935942959" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

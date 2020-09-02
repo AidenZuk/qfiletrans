@@ -242,7 +242,7 @@ pub fn start_server(parent_path: std::path::PathBuf) {
 }
 
 pub fn start_upload(dest: String, real_file: &std::path::PathBuf, cut_file_name: &std::path::PathBuf) {
-    let mut buffer = vec![0u8; 128 * 1024 * 1024];
+    let mut buffer = vec![0u8; 64 * 1024 * 1024];
     println!("connecting to {}",&dest);
     let mut stream = if let Ok(stream) = TcpStream::connect(&dest) {
         stream
@@ -266,7 +266,9 @@ pub fn start_upload(dest: String, real_file: &std::path::PathBuf, cut_file_name:
                                     break;
                                 } else {
                                     match writer.write_all(&buffer[0..read_size]) {
-                                        Ok(_) => {}
+                                        Ok(_) => {
+                                            thread::sleep(Duration::from_millis(200));
+                                        }
                                         Err(e) => {
                                             error!("error in write stream:{}", e.to_string())
                                         }
