@@ -51,7 +51,7 @@ struct Cli {
     pub dest: String,
 }
 
-const buf_len: usize = 256 as usize * 1024 * 1024;
+const buf_len: usize = 200 as usize * 1024 * 1024;
 
 #[derive(Clone, Eq, PartialEq, Debug)]
 pub struct FileInfo {
