@@ -16,7 +16,7 @@ use std::net::TcpListener;
 use async_std::prelude::*;
 use anyhow::Result;
 use async_std::io;
-
+use thread_priority::*;
 use std::future::Future;
 use std::pin::Pin;
 use std::task::{Context, Poll};
@@ -129,6 +129,11 @@ pub fn start_server(parent_path: std::path::PathBuf) {
                 let mut cnts = total_threads.lock().unwrap();
                 let cnts = cnts.deref_mut();
                 *cnts += 1;
+            }
+
+            let set_res = set_current_thread_priority(ThreadPriority::Min);
+            if !set_res.is_ok()  {
+                info!("set store thread priority failed: {:?}", set_res.unwrap_err())
             }
             let stream = stream.unwrap();
             let (reader, writer) = &mut (&stream, &stream);
