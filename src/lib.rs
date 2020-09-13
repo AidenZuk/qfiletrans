@@ -192,7 +192,7 @@ pub fn start_server(parent_path: std::path::PathBuf) {
                                                         .create(true)
                                                         .write(true)
                                                         .append(true)
-                                                        .open(parent_path.join("files.txt"))
+                                                        .open(&file_name.parent().unwrap().join("files.txt"))
                                                         .unwrap();
 
                                                     if let Err(e) = writeln!(file, "{:?}",&file_name.display()) {
@@ -323,16 +323,22 @@ pub fn start_upload(dest: String, real_file: &std::path::PathBuf, cut_file_name:
 
 #[cfg(test)]
 mod Test {
-    use crate::FileInfo;
-
+    use crate::{start_server,start_upload,FileInfo};
+    use std::path::PathBuf;
+    use std::thread;
     #[test]
     fn test_FileInfo() {
         let file_info = FileInfo::new(2 * 1024 * 1024, String::from("thies is a test/with path/filename is.txt"));
         let result = file_info.to_vec();
 
-        let file_info2 = FileInfo::from(&result);
-        let file_info3 = FileInfo::from(&result[..]);
-        assert_eq!((&result).len(), 1024);
-        assert_eq!(file_info, file_info2);
+
+        let t1 = thread::spawn(||{
+            start_server(PathBuf::from("/mnt/data/server"));
+        });
+        let t2 = thread::spawn(||{
+            start_upload(String::from("localhost:8081"),&PathBuf::from("/mnt/ssd/bench/cache/s-t01000-1/sc-02-data-tree-c-0.dat"),&PathBuf::from("s-t01000-1/sc-02-data-tree-c-0.dat"));
+        });
+        t2.join();
+        t1.join();
     }
 }
