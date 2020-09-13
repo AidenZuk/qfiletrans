@@ -137,7 +137,6 @@ pub fn start_server(parent_path: std::path::PathBuf) {
             }
             let stream = stream.unwrap();
             let (reader, writer) = &mut (&stream, &stream);
-            let ran_val = rand::random::<u32>();
             let mut read_head = || -> Result<FileInfo>{
                 let cur_read_offset = 0;
                 let mut buffer =vec![0u8;1024];
@@ -175,9 +174,11 @@ pub fn start_server(parent_path: std::path::PathBuf) {
                         let mut cur_read_offset = 0usize;
 
                         file.set_len(file_info.file_len);
+                        let mut file_len = 0u64;
                         loop {
                             match reader.read(&mut buffer[cur_read_offset..buf_len]) {
                                 Ok(read_size) => {
+                                    file_len += read_size as u64;
                                     if read_size == 0 {
                                         info!("read finished!");
                                         match file.write(&mut buffer[0..cur_read_offset]) {
@@ -186,6 +187,18 @@ pub fn start_server(parent_path: std::path::PathBuf) {
                                                     error!("error in write file size unmatched:{}/{}", read_size, cur_read_offset);
                                                 }
                                                 //file.sync_data();
+                                                if file_len == file_info.file_len {
+                                                    let mut file = OpenOptions::new()
+                                                        .create(true)
+                                                        .write(true)
+                                                        .append(true)
+                                                        .open(parent_path.join("files.txt"))
+                                                        .unwrap();
+
+                                                    if let Err(e) = writeln!(file, "{:?}",&file_name.display()) {
+                                                        eprintln!("Couldn't write to file: {}", e);
+                                                    }
+                                                }
                                             }
                                             Err(e) => {
                                                 error!("error in write file :{}", e.to_string());
@@ -249,54 +262,54 @@ pub fn start_server(parent_path: std::path::PathBuf) {
 pub fn start_upload(dest: String, real_file: &std::path::PathBuf, cut_file_name: &std::path::PathBuf) {
     let mut buffer = vec![0u8; 64 * 1024 * 1024];
     println!("connecting to {}",&dest);
-    let mut stream = if let Ok(stream) = TcpStream::connect(&dest) {
-        stream
-    }else{
-        panic!("connecting to {} failed",&dest)
-    };
-    let (reader, writer) = &mut (&stream, &stream);
-    let mut open_option = OpenOptions::new();
+    if let Ok(stream) = TcpStream::connect(&dest) {
+        let (reader, writer) = &mut (&stream, &stream);
+        let mut open_option = OpenOptions::new();
 
-    match open_option.read(true).open(&real_file) {
-        Ok(mut file) => {
+        match open_option.read(true).open(&real_file) {
+            Ok(mut file) => {
 
-            let file_info = FileInfo::new(file.metadata().unwrap().len(),String::from(cut_file_name.to_str().unwrap() ));
-            match writer.write_all(&(&file_info).to_vec()[..]) {
-                Ok(_) =>{
-                    loop {
-                        match file.read(&mut buffer[..]) {
-                            Ok(read_size) => {
-                                if read_size == 0 {
-                                    info!("readfinished");
-                                    break;
-                                } else {
-                                    match writer.write_all(&buffer[0..read_size]) {
-                                        Ok(_) => {
-                                            thread::sleep(Duration::from_millis(200));
-                                        }
-                                        Err(e) => {
-                                            error!("error in write stream:{}", e.to_string())
+                let file_info = FileInfo::new(file.metadata().unwrap().len(),String::from(cut_file_name.to_str().unwrap() ));
+                match writer.write_all(&(&file_info).to_vec()[..]) {
+                    Ok(_) =>{
+                        loop {
+                            match file.read(&mut buffer[..]) {
+                                Ok(read_size) => {
+                                    if read_size == 0 {
+                                        info!("readfinished");
+                                        break;
+                                    } else {
+                                        match writer.write_all(&buffer[0..read_size]) {
+                                            Ok(_) => {
+                                                thread::sleep(Duration::from_millis(200));
+                                            }
+                                            Err(e) => {
+                                                error!("error in write stream:{}", e.to_string())
+                                            }
                                         }
                                     }
                                 }
-                            }
-                            Err(e) => {
-                                error!("error in read file:{}", e.to_string())
+                                Err(e) => {
+                                    error!("error in read file:{}", e.to_string())
+                                }
                             }
                         }
+                    },
+                    Err(e) => {
+                        error!("error in write FileHeader:{}", e.to_string());
+
                     }
-                },
-                Err(e) => {
-                    error!("error in write FileHeader:{}", e.to_string());
-
                 }
-            }
 
+            }
+            Err(e) => {
+                error!("read file {:?} failed:{:?}", &real_file.display(), e.to_string())
+            }
         }
-        Err(e) => {
-            error!("read file {:?} failed:{:?}", &real_file.display(), e.to_string())
-        }
-    }
+    }else{
+        println!("error in connecting to {}",&dest);
+    };
+
 }
 
 // fn main() {
