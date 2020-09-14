@@ -186,13 +186,15 @@ pub fn start_server(parent_path: std::path::PathBuf) {
                                                 if write_size != cur_read_offset {
                                                     error!("error in write file size unmatched:{}/{}", read_size, cur_read_offset);
                                                 }
+                                                let file_txt = format!("{}.txt",&file_name.parent().unwrap().to_str().unwrap());
+                                                info!("create file:{}",file_txt);
                                                 //file.sync_data();
                                                 if file_len == file_info.file_len {
                                                     let mut file = OpenOptions::new()
                                                         .create(true)
                                                         .write(true)
                                                         .append(true)
-                                                        .open(&file_name.parent().unwrap().join("files.txt"))
+                                                        .open(PathBuf::from(file_txt))
                                                         .unwrap();
 
                                                     if let Err(e) = writeln!(file, "{:?}",&file_name.display()) {
@@ -336,7 +338,7 @@ mod Test {
             start_server(PathBuf::from("/mnt/data/server"));
         });
         let t2 = thread::spawn(||{
-            start_upload(String::from("localhost:8081"),&PathBuf::from("/mnt/ssd/bench/cache/s-t01000-1/sc-02-data-tree-c-0.dat"),&PathBuf::from("s-t01000-1/sc-02-data-tree-c-0.dat"));
+            start_upload(String::from("localhost:8081"),&PathBuf::from("/mnt/ssd/bench/cache/s-t01000-1/sc-02-data-tree-c-1.dat"),&PathBuf::from("s-t01000-1/sc-02-data-tree-c-1.dat"));
         });
         t2.join();
         t1.join();
